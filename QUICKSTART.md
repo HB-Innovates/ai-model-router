@@ -1,282 +1,196 @@
-# 🚀 Quick Start Guide
+# Quick Start
 
-## 5-Minute Setup
+Get up and running in 5 minutes.
 
-### Option 1: Try the Live Demo (No Installation)
+## Option 1: No Setup (Browser Only)
 
-🜐 **[Visit ai-model-router-demo.vercel.app](https://ai-model-router-demo.vercel.app)**
-
-1. Click the link above
-2. Enter a task description (e.g., "Write a product description for a SaaS expense tracker")
-3. Select or auto-detect the task type
-4. Answer 1-3 clarifying questions
-5. Review the engineered prompt
-6. Select 2-3 models to compare
-7. See side-by-side results with cost/quality/speed metrics
-
-**Tip:** The demo uses mock data. To use real models, add your own API keys.
-
----
-
-### Option 2: Run Locally
-
-#### 1. Clone the Repository
+**Just open `index.html` in your browser.**
 
 ```bash
 git clone https://github.com/HB-Innovates/ai-model-router.git
 cd ai-model-router
+open index.html
 ```
 
-#### 2. Install Dependencies
+Or double-click `index.html` in Finder/Explorer.
 
-```bash
-npm install
+Works with mock data. No dependencies, no build step.
+
+---
+
+## Option 2: Live Demo
+
+**No installation needed.** Just visit:
+
+```
+https://ai-model-router-demo.vercel.app
 ```
 
-#### 3. Set Up Environment Variables (Optional)
+Try the app, see how it works.
 
-To use real AI models, create a `.env.local` file:
+---
+
+## Option 3: Local Development (React Setup)
+
+Plan for V1 (coming soon). For now, stick to Option 1.
+
+---
+
+## Typical User Flow
+
+### 1. Enter Your Task
+
+```
+Task: "Write a product description for a SaaS tool that helps teams 
+manage their AI model spending. Focus on ROI and ease of use."
+```
+
+Hit "Analyze Request" → System detects this as "copywriting"
+
+### 2. Answer Clarifying Questions
+
+System asks:
+- "Target audience?" → You pick "C-suite"
+- "Preferred tone?" → You pick "Professional"
+
+### 3. Review Engineered Prompt
+
+System generates structured prompt with 5 sections:
+
+```
+💫 ROLE & EXPERTISE
+Expert B2B SaaS copywriter specializing in cost optimization tools
+
+💫 CONTEXT
+Product: Cost optimization platform for AI model selection
+Target: C-suite executives (CFO, VP Eng)
+Key benefit: 30-40% cost savings vs. defaulting to GPT-4
+
+💫 CONSTRAINTS
+- Keep it concise (150 words max)
+- Focus on ROI and ease of use
+- Professional tone, no hype
+- Highlight decision speed (not time spent comparing)
+
+💫 OUTPUT FORMAT
+Single paragraph product description
+
+💫 QUALITY CRITERIA
+- Clarity: Is it obvious what problem this solves?
+- Specificity: Does it mention concrete benefits (cost %, time savings)?
+- Credibility: Does it feel trustworthy (avoid bold claims)?
+```
+
+You can edit any section. "Approve & Find Models" when ready.
+
+### 4. Select Models to Compare
+
+System recommends:
+
+```
+#1 🌟 92/100 GPT-4 (OpenAI)
+   Best for complex writing, excellent reasoning
+   Cost: $0.15  |  Latency: 2.5s
+
+#2 🌟 88/100 Claude 3 Opus (Anthropic)  
+   Excellent reasoning, great for nuanced content
+   Cost: $0.12  |  Latency: 3.5s  |  Privacy-first
+
+#3 🌟 85/100 Gemini Pro (Google)
+   Balanced performance, cost-effective
+   Cost: $0.08  |  Latency: 4.0s
+```
+
+Select 2-3 models (checkboxes). You pick all three.
+
+### 5. See Results
+
+```
+┌────────────────────────────────────────├────────────────────────────────────────├────────────────────────────────────────┐
+│ GPT-4                   │ Claude 3 Opus          │ Gemini Pro             │
+├────────────────────────────────────────╪────────────────────────────────────────╪────────────────────────────────────────┘
+│                          │                        │                        │
+│ ModelRouter simplifies    │ ModelRouter simplifies │ ModelRouter helps...   │
+│ AI model selection...     │ AI model selection...  │                        │
+│                          │                        │                        │
+├────────────────────────────────────────╪────────────────────────────────────────╪────────────────────────────────────────┘
+│ ⏱️ 2.5s | 💰 $0.15 | ⭐ 9.2 │ ⏱️ 3.5s | 💰 $0.12 | ⭐ 8.9 │ ⏱️ 4.0s | 💰 $0.08 │
+└────────────────────────────────────────┴────────────────────────────────────────┴────────────────────────────────────────┘
+
+💰 TOTAL COST: $0.35  |  📌 422 tokens  |  ⏱️ Avg latency: 3.3s
+```
+
+**Decision:** Claude 3 Opus is $0.03 cheaper than GPT-4 with nearly identical quality (8.9 vs 9.2). In production, you'd choose Claude 3.
+
+---
+
+## What Happens Next
+
+### Option A: Refine Prompt
+
+Click "Refine Prompt" → Go back to edit engineered prompt → Re-run models with new version
+
+Example: Change "150 words max" to "50 words max" and re-run. See which model still handles brevity well.
+
+### Option B: Try Different Models
+
+Click "Try Different Models" → Swap selections (e.g., try Llama instead of GPT-4) → Re-run
+
+### Option C: New Request
+
+Click "New Request" → Start fresh
+
+---
+
+## To Use Real API Keys (V1+)
+
+When real API integration is available:
 
 ```bash
+# Create .env file
 cat > .env.local << EOF
-# OpenAI
 VITE_OPENAI_API_KEY=sk-your-key-here
-
-# Anthropic
 VITE_ANTHROPIC_API_KEY=sk-ant-your-key-here
-
-# Google
 VITE_GOOGLE_API_KEY=AIza-your-key-here
-
-# Backend URL (optional, defaults to localhost:3000)
-VITE_API_URL=http://localhost:3000
 EOF
-```
 
-**Important:** Never commit `.env.local` to version control. Use `.env.example` as template.
-
-#### 4. Start Development Server
-
-```bash
+# Start app
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
-
-#### 5. (Optional) Start Backend Server
-
-If you want to use the full backend with database persistence:
-
-```bash
-cd backend
-npm install
-
-# Create database
-createdb ai_model_router_dev
-
-# Run migrations
-npm run migrate:dev
-
-# Start server
-npm run dev  # Runs on http://localhost:3000
-```
+Now requests run against real models (not mocks).
 
 ---
 
-## 📋 Typical User Flow
+## Troubleshooting
 
-### Step 1: Request Input
-```
-🧠 User: "I need to write a compelling product description for a SaaS tool..."
-🧦 System: Task category detected as 'copywriting' (92% confidence)
-```
+**Q: App doesn't load**
+A: Make sure you're opening `index.html` directly in browser (not via `file://` if it requires a server)
 
-### Step 2: Clarifying Questions (if needed)
-```
-Question 1: Who is your target audience?
-  Options: [C-level] [Product managers] [Engineers] [Other]
-  User selects: Product managers
+**Q: Something looks broken on mobile**
+A: Try in Chrome DevTools mobile view (F12 → Toggle Device Toolbar)
 
-Question 2: What tone do you want?
-  Options: [Professional] [Friendly & casual] [Creative & bold] [Technical]
-  User selects: Friendly & casual
-```
+**Q: Can I modify the prompts?**
+A: Yes. Click "Approve & Find Models" screen, edit any of the 5 sections.
 
-### Step 3: Engineered Prompt
-```
-Role: You are an expert copywriter specializing in friendly, persuasive writing for product managers.
+**Q: Why are results the same every time?**
+A: MVP uses mock data. When V1 ships with real APIs, results will vary.
 
-Context: You are writing a product description for ModelRouter, a SaaS tool that helps teams manage AI model costs.
-
-Constraints:
-  - Word count: 100-150 words
-  - Tone: Friendly & casual
-  - Must include: Value proposition, call-to-action
-  - Must avoid: Technical jargon
-
-Output Format: Markdown
-
-Quality Rubric:
-  ✓ Clarity: Easy to understand for non-experts
-  ✓ Persuasion: Creates desire or sense of FOMO
-  ✓ Brand voice: Matches intended tone
-  ✓ CTA: Clear call-to-action
-  ✓ Length: Between 100-150 words
-```
-
-### Step 4: Model Recommendations
-```
-Rank  Model              Provider     Score  Cost      Speed    Reason
-─────────────────────────────────────────────────
-1     GPT-4             OpenAI       92     $0.15    2.5s    Excellent writing quality
-2     Claude 3 Opus     Anthropic    88     $0.12    3.5s    Privacy-first, no input training
-3     Gemini Pro        Google       85     $0.08    4.0s    Cost-effective alternative
-4     Claude 3 Sonnet   Anthropic    82     $0.10    3.0s    Balanced performance
-```
-
-**User selects:** GPT-4, Claude 3 Opus, Gemini Pro
-
-### Step 5: Run Models (Parallel Execution)
-```
-Running 3 models in parallel...
-
-[=======================] GPT-4 completed (95 tokens, 2.4s) ✓
-[=======================] Claude 3 Opus completed (88 tokens, 3.2s) ✓
-[=======================] Gemini Pro completed (92 tokens, 3.9s) ✓
-```
-
-### Step 6: Results Comparison
-```
-┌──────────────────────────────────────┐
-│ Model             Cost    Speed   Quality  Best For
-├──────────────────────────────────────┤
-│ GPT-4            $0.15  2.5s    9.2/10   🤟 Best overall
-│ Claude 3 Opus    $0.12  3.5s    8.9/10   🔐 Privacy-first
-│ Gemini Pro       $0.08  4.0s    8.5/10   💰 Budget option
-└──────────────────────────────────────┘
-
-Total Cost: $0.35
-Total Tokens: 275
-Recommendation: Use GPT-4 for best quality, or Gemini Pro to save $0.07/query
-
-Consolidated Answer Option: Merge best parts from all models ✅
-```
-
-### Step 7: Iterate or Export
-```
-Options:
-  📝 Refine Prompt   → Go back, tweak clarifications
-  🔄 Try Different Models → Swap models and re-run
-  💳 Lock Models    → Save this combo for similar tasks
-  🏠 New Request    → Start fresh
-  💾 Save Project   → Store results for later (V1+)
-```
+**Q: How do I contribute?**
+A: Fork repo, make changes, open PR. See [CONTRIBUTING.md](.github/CONTRIBUTING.md)
 
 ---
 
-## 🐉 Docker Setup
+## Next Steps
 
-### Run Everything with Docker Compose
-
-```bash
-cd docker
-docker-compose up -d
-```
-
-This starts:
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:5000
-- **PostgreSQL**: localhost:5432
-- **Redis**: localhost:6379
+1. **Try the MVP:** Open `index.html`, test all 5 steps
+2. **Read the spec:** [PRODUCT_SPEC.md](PRODUCT_SPEC.md) explains the vision
+3. **Check the roadmap:** [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) shows what's next
+4. **Deploy to Vercel:** Fork repo, deploy in 1 click. Get a live URL.
+5. **Share:** Send link to friends. Ask for feedback.
 
 ---
 
-## 🚫 Troubleshooting
+**Questions?** Open an issue or start a discussion in GitHub.
 
-### Issue: "API key invalid"
-
-**Solution:**
-1. Check your `.env.local` file has correct key format
-2. Verify key has required permissions
-3. Test key on provider's website
-4. Try demo mode (without real keys) first
-
-### Issue: "Models not running"
-
-**Solution:**
-1. Check browser console for errors (F12)
-2. Verify API keys are provided or use demo mode
-3. Check internet connection
-4. Try one model at a time
-
-### Issue: "Slow responses"
-
-**Solution:**
-1. Check network latency
-2. Some models are slower (Claude 3, Gemini) — expected
-3. Try fewer models to speed up execution
-4. Use cheaper models for speed (Gemini Pro)
-
-### Issue: "Port already in use"
-
-**Solution:**
-```bash
-# Kill process using port 5173
-lsof -ti:5173 | xargs kill -9
-
-# Or use different port
-npm run dev -- --port 3456
-```
-
----
-
-## 🎉 Next Steps
-
-1. **Explore features**: Try different task types and models
-2. **Add your API keys**: Enable real model execution
-3. **Check docs**: Read [PRODUCT_SPEC.md](PRODUCT_SPEC.md) for full features
-4. **Deploy**: Follow [DEPLOYMENT.md](DEPLOYMENT.md) for cloud setup
-5. **Contribute**: See [CONTRIBUTING.md](.github/CONTRIBUTING.md) to help improve
-
----
-
-## 🚧 Common Questions
-
-### Q: Is this free?
-
-**A:** The app is free (open source, MIT licensed). Costs come from AI model providers:
-- Use your own API keys (pay providers directly)
-- Or try demo mode (mock results, no cost)
-
-### Q: Which models does it support?
-
-**A:** MVP supports:
-- ✅ OpenAI (GPT-4, GPT-3.5-turbo)
-- ✅ Anthropic (Claude 3 Opus, Sonnet, Haiku)
-- ✅ Google (Gemini Pro)
-
-V1 adds:
-- Ollama (local, private)
-- DALL-E, Whisper (image/audio specialists)
-
-### Q: Can I use it offline?
-
-**A:** Yes! Use Ollama for fully local inference (no API keys needed). See [DEPLOYMENT.md](DEPLOYMENT.md).
-
-### Q: Is my data private?
-
-**A:** By default:
-- Prompts sent to model providers (follow their privacy policies)
-- Results stored locally in your browser
-- Backend only stores if you sign up (optional)
-
-Use "Do not store" mode or local Ollama for maximum privacy.
-
-### Q: How do I report bugs?
-
-**A:** Open an issue: https://github.com/HB-Innovates/ai-model-router/issues
-
----
-
-**Happy routing! 🦀**
-
+Happy routing! 🚀
