@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelRouter - Pick the Right AI Model Every Time</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-dark: #0d6e66;
+            --text: #0f172a;
+            --text-light: #475569;
+            --bg: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 20px;
+            opacity: 0.95;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        section {
+            margin-bottom: 80px;
+        }
+
+        section h2 {
+            font-size: 36px;
+            margin-bottom: 24px;
+            color: var(--text);
+        }
+
+        section p {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .problem {
+            background: #fef3c7;
+            padding: 40px;
+            border-radius: 12px;
+            border-left: 4px solid #f59e0b;
+        }
+
+        .problem h3 {
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .problem ul {
+            margin-left: 20px;
+        }
+
+        .problem li {
+            margin-bottom: 12px;
+            color: #78350f;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .flow-diagram {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .flow-step::before {
+            content: '';
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .flow-step:nth-child(1)::before { content: '1'; }
+        .flow-step:nth-child(2)::before { content: '2'; }
+        .flow-step:nth-child(3)::before { content: '3'; }
+        .flow-step:nth-child(4)::before { content: '4'; }
+        .flow-step:nth-child(5)::before { content: '5'; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin: 40px 0;
+        }
+
+        .stat {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .repo-link {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border: 2px solid var(--primary);
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .repo-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .repo-link a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        footer p {
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--primary-light);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 32px;
+            }
+
+            header p {
+                font-size: 16px;
+            }
+
+            section h2 {
+                font-size: 28px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ModelRouter</h1>
+        <p>Stop guessing which AI model to use. Pick the right one, every time.</p>
+        <div class="cta-buttons">
+            <a href="../index.html" class="btn btn-primary">Try Demo Now</a>
+            <a href="https://github.com/HB-Innovates/ai-model-router" class="btn btn-secondary">View on GitHub</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Problem Section -->
+        <section>
+            <h2>The Problem</h2>
+            <div class="problem">
+                <h3>Most people don't know which AI model to use.</h3>
+                <ul>
+                    <li>Defaulting to GPT-4 for everything (expensive, slow for simple tasks)</li>
+                    <li>Randomly picking Claude because they heard it's good</li>
+                    <li>Zero visibility into cost vs quality vs speed tradeoffs</li>
+                    <li>Wasting 30-40% on models they don't actually need</li>
+                    <li>No easy way to compare which model actually performs best</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section>
+            <h2>The Solution</h2>
+            <p>ModelRouter is a dashboard where you describe your problem, we engineer a better prompt, find the right models (paid + free, global), and show you side-by-side results.</p>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">Type your problem (raw, unfiltered)</div>
+                <div class="flow-step">Answer 1-3 clarifying questions</div>
+                <div class="flow-step">Review & approve engineered prompt</div>
+                <div class="flow-step">Select models to compare</div>
+                <div class="flow-step">See results: cost, speed, quality</div>
+            </div>
+        </section>
+
+        <!-- Why It Matters -->
+        <section>
+            <h2>Why This Matters</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>💰 Saves Money</h3>
+                    <p>Stop overpaying. Use the right model for the right job. Save 30-40%.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✨ Better Results</h3>
+                    <p>Structured prompts outperform vague requests. 20-30% quality improvement.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Fast Iteration</h3>
+                    <p>Try different prompts or models in seconds, not minutes. Compare instantly.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Data-Driven</h3>
+                    <p>See cost, latency, and quality side-by-side. Make decisions based on facts.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 Privacy Options</h3>
+                    <p>Choose providers based on privacy needs. Local models, no-store modes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚀 Learning</h3>
+                    <p>Understand what makes a good prompt. Learn model tradeoffs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section>
+            <h2>What You Get</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>✅ Task Classification</h3>
+                    <p>Auto-detects: copywriting, coding, research, brainstorming, translation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Prompt Engineering</h3>
+                    <p>Role → Context → Constraints → Output Format → Quality Criteria</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Smart Routing</h3>
+                    <p>Considers task fit, cost, speed, privacy, capability match</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Multi-Model Execution</h3>
+                    <p>OpenAI, Anthropic, Google, local Ollama—all in parallel</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Results Comparison</h3>
+                    <p>Side-by-side outputs with cost, latency, quality metrics</p>
+                </div>
+                <div class="feature-card">
+                    <h3>✅ Iteration Loops</h3>
+                    <p>Refine prompt or swap models without starting over</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section>
+            <h2>What's Next</h2>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">Now</div>
+                    <div class="stat-label">MVP: Full 5-step workflow</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Week 2-3</div>
+                    <div class="stat-label">Deploy to Vercel</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Week 4-10</div>
+                    <div class="stat-label">V1: Real APIs, auth, DB</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Repo Link -->
+        <div class="repo-link">
+            <p>🔗 Full source code on GitHub</p>
+            <a href="https://github.com/HB-Innovates/ai-model-router">github.com/HB-Innovates/ai-model-router</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>ModelRouter © 2025</p>
+        <p>MIT License • Open Source • Production-Ready</p>
+        <div class="footer-links">
+            <a href="https://github.com/HB-Innovates/ai-model-router">GitHub</a>
+            <a href="https://github.com/HB-Innovates/ai-model-router#readme">README</a>
+            <a href="https://github.com/HB-Innovates/ai-model-router/blob/main/VISION.md">Vision</a>
+            <a href="https://github.com/HB-Innovates/ai-model-router/blob/main/PRODUCT_SPEC.md">Spec</a>
+        </div>
+    </footer>
+</body>
+</html>
