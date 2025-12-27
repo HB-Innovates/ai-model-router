@@ -1,502 +1,373 @@
-# 🎯 Implementation Plan
+# Implementation Plan: AI Model Router
 
-## Executive Summary
+## Overview
 
-- **MVP Duration**: 3 weeks (120 engineering hours)
-- **V1 Duration**: 6-10 weeks (160 engineering hours)
-- **Target Launch**: Week 3 for MVP (live demo), Week 10 for V1 (production-ready)
-- **Team Size**: 1-2 full-stack engineers (or 1 engineer + part-time design/PM)
+**MVP Timeline:** 3 weeks, ~120 engineering hours (1 engineer full-time)
+
+**V1 Timeline:** 6-10 weeks after MVP ship
+
+**Philosophy:** Ship the smallest useful thing first (MVP). Get user feedback. Build V1 based on what matters.
 
 ---
 
-## 📊 MVP Scope (Weeks 1–3)
+## MVP: Weeks 1-3
 
 ### Goal
-**Validate core loop:** Request → Classify → Clarify → Engineer → Route → Run → Compare
+Working single-file app that demonstrates the complete 5-step workflow. No database, no auth, no real API calls. Just enough to show:
+- Can classify tasks
+- Can generate structured prompts
+- Can route intelligently
+- Can compare models (mock results)
 
-### Week 1: Foundation & Infrastructure
+### Week 1: Foundation
 
-**Frontend Setup**
-- [ ] Init React project (Vite)
-- [ ] Set up Tailwind CSS + design system
-- [ ] Install dependencies (Zustand, Axios, React Hook Form)
-- [ ] Create folder structure (screens, components, hooks, utils)
-- [ ] Build layout shell & step indicator
-- **Deliverable**: Blank app with navigation between 5 screens
+**Frontend Setup (40h)**
+- [ ] Create project structure (React + Vite, or just HTML+JS)
+- [ ] Set up routing (5 screens: request → clarify → prompt → route → results)
+- [ ] Create base UI components (cards, buttons, forms)
+- [ ] Implement state management (Zustand or Context API)
+- [ ] Responsive design (mobile + desktop)
+- [ ] Set up basic styling (Tailwind CSS or custom)
 
-**Backend Setup**
-- [ ] Init Express.js server
-- [ ] Set up middleware (CORS, logging, error handling)
-- [ ] Create basic route stubs (classify, clarify, engineer, route, models/run)
-- [ ] Set up environment variables (.env.example)
-- **Deliverable**: API responds to all endpoints (mock data)
+**Classifier Logic (20h)**
+- [ ] Implement task type detection (rule-based, rule/keyword matching)
+- [ ] Support 5 categories: copywriting, coding, research, brainstorming, translation
+- [ ] Allow user override
+- [ ] Add ~50 test cases
 
-**Infrastructure**
-- [ ] GitHub repo + CI/CD stub
-- [ ] `.gitignore`, `package.json`, README
-- [ ] Docker setup (optional for MVP)
-- **Deliverable**: Code pushed, repo ready
+**Estimated Hours:** 60h
 
-**Effort**: 30 hours (15 frontend, 15 backend)
+### Week 2: Core Logic
+
+**Clarification Questions (20h)**
+- [ ] Build question templates per task type (copywriting Q's != coding Q's)
+- [ ] Implement max 3 question UX
+- [ ] Store answers in state
+- [ ] Show/hide questions based on confidence
+
+**Prompt Engineering (30h)**
+- [ ] Create 5-section template (role, context, constraints, format, rubric)
+- [ ] Implement template population based on task type + answers
+- [ ] Make prompt editable UI
+- [ ] Test with actual requests (sanity check)
+
+**Estimated Hours:** 50h
+
+### Week 3: Routing & Results
+
+**Model Router (20h)**
+- [ ] Define model scoring algorithm (task fit, cost, latency, privacy)
+- [ ] Create model cards with recommendations
+- [ ] Implement model selection UI (checkboxes)
+- [ ] Mock model data (GPT-4, Claude 3, Gemini Pro, etc.)
+
+**Results & Comparison (20h)**
+- [ ] Results screen layout (side-by-side columns)
+- [ ] Cost calculation display
+- [ ] Mock model responses (convincing text)
+- [ ] Iteration flows (refine prompt, swap models, new request)
+
+**Polish & Deploy (10h)**
+- [ ] Bug fixes
+- [ ] Mobile responsiveness check
+- [ ] Deploy to Vercel (1-click)
+- [ ] Write QUICKSTART.md
+- [ ] Create demo link
+
+**Estimated Hours:** 50h
+
+### MVP Deliverables
+
+```
+✅ index.html (or App.jsx)         Single-file or minimal build
+✅ README.md                       Overview + quick start
+✅ QUICKSTART.md                   5-minute guide
+✅ PRODUCT_SPEC.md                 Full specification
+✅ Public GitHub repo               MIT license, live demo link
+✅ Deployed live demo               Vercel URL
+```
+
+### MVP Success Criteria
+
+- [ ] App loads instantly (no build step)
+- [ ] Complete workflow works end-to-end (request → results in <2 min)
+- [ ] Prompt engineering produces sensible output
+- [ ] Routing recommendations seem reasonable
+- [ ] Mobile friendly
+- [ ] Code is clean enough for recruiter review
 
 ---
 
-### Week 2: Core Logic & Routing
+## V1: Weeks 4-10 (After MVP Ship)
 
-**Intent Classification**
-- [ ] Build task type detector (rule-based, not ML)
-  - Keywords: "write", "copy", "code", "research", "idea", "brainstorm", "translate"
-  - Accuracy target: 80%+ for clear inputs
-- [ ] Create TASK_CATEGORIES dictionary with 5 categories
-  - copywriting, coding, research, brainstorming, translation
-- [ ] Add clarifying questions per category (max 3)
-- **Deliverable**: Classifier works for 80% of inputs
+### Before Starting V1
 
-**Prompt Engineering**
-- [ ] Build template-based engine per task type
-  - Role, context, constraints, output format, quality rubric
-- [ ] Create prompt preview screen
-- [ ] Make sections user-editable
-- [ ] Generate full prompt text
-- **Deliverable**: High-quality engineered prompts
+**Gather feedback (1 week):**
+- Share MVP with 10-20 users
+- Ask: What's missing? What's confusing? What would make you use this regularly?
+- Identify top 3 features that matter most
+- Adjust roadmap based on feedback
 
-**Model Router & Scoring**
-- [ ] Define model profiles (name, provider, capabilities, cost, latency)
-  - Include: GPT-4, Claude 3 Opus, Claude 3 Sonnet, Gemini Pro, Llama 2 (local)
-- [ ] Implement scoring algorithm (Python pseudocode → JS)
-  - Task fit: Base scores per category
-  - Cost factor: Budget preference multiplier
-  - Speed factor: Latency preference multiplier
-  - Privacy factor: Local model bonus
-- [ ] Rank & recommend top 3-5 models
-- [ ] Show cost, latency, privacy notes
-- **Deliverable**: Routing recommends correct models for tasks
+### Week 4: Backend Setup
 
-**Parallel Model Execution (Simulated)**
-- [ ] Build mock API responses per model
-  - Different "copywriting" responses for each model
-- [ ] Simulate network delay (random 2-4s)
-- [ ] Display per-model progress (queued → running → done)
-- [ ] Collect results
-- **Deliverable**: Multi-model results in comparison view
+**Database (20h)**
+- [ ] Design PostgreSQL schema (users, projects, prompts, runs, costs, audit_logs)
+- [ ] Set up Prisma ORM
+- [ ] Create migrations
+- [ ] Add seed data
 
-**Effort**: 40 hours (15 frontend, 15 logic/routing, 10 backend)
+**Backend Skeleton (20h)**
+- [ ] Set up Express.js (or FastAPI)
+- [ ] Create basic CRUD endpoints
+- [ ] Add error handling middleware
+- [ ] Set up logging
 
----
+**Auth Setup (15h)**
+- [ ] GitHub OAuth flow
+- [ ] JWT token generation/validation
+- [ ] Protected endpoints
+- [ ] Session management
 
-### Week 3: UI Completion & Integration
+**Estimated Hours:** 55h
 
-**Frontend Screens**
-- [ ] **Request Screen**: Input text + task hint dropdown
-- [ ] **Clarify Screen**: Render Q&A dynamically, collect answers
-- [ ] **Prompt Screen**: Show engineered prompt, editable sections
-- [ ] **Route Screen**: Model recommendations grid, toggle selection, API key inputs
-- [ ] **Results Screen**: Side-by-side output, cost estimate, action buttons
-- [ ] Step indicator: Update as user progresses
-- [ ] Iteration buttons: "Refine", "Try different models", "New request"
-- **Deliverable**: All 5 screens fully functional
+### Week 5: Frontend Migration
 
-**Integration**
+**React Setup (20h)**
+- [ ] Convert MVP to React component structure
+- [ ] Set up state management (Zustand)
+- [ ] Implement React Router
+- [ ] Add form handling (React Hook Form)
+
+**API Integration (20h)**
+- [ ] Create API client (axios + TanStack Query)
 - [ ] Connect frontend to backend endpoints
-- [ ] Real model calls to OpenAI/Anthropic/Google (if keys provided)
-- [ ] Fallback to mock data if no keys
-- [ ] Error handling & user feedback
-- [ ] Loading states & spinner
-- **Deliverable**: End-to-end flow works
+- [ ] Handle loading/error states
+- [ ] Add proper error messages
 
-**Testing & Polish**
-- [ ] Basic unit tests (classifier, router)
-- [ ] Manual E2E testing (all flows)
-- [ ] Performance: Load time < 3s
-- [ ] Mobile responsiveness
-- [ ] Accessibility: Keyboard nav, color contrast
-- **Deliverable**: Bug-free, production-ready MVP
+**Authentication UI (15h)**
+- [ ] Login/signup screens
+- [ ] OAuth flow integration
+- [ ] Redirect after auth
+- [ ] Logout functionality
 
-**Deployment**
-- [ ] Deploy frontend to Vercel
-- [ ] Deploy backend to Railway/Render (free tier)
-- [ ] Set up environment variables on cloud
-- [ ] Live demo URL: [ai-model-router-demo.vercel.app](https://ai-model-router-demo.vercel.app)
-- **Deliverable**: Publicly accessible app
+**Estimated Hours:** 55h
 
-**Effort**: 50 hours (25 frontend, 15 integration, 10 testing/deploy)
+### Week 6-7: Real Model Integration
 
----
+**OpenAI Integration (20h)**
+- [ ] Set up OpenAI SDK
+- [ ] Create model adapter (abstract provider calls)
+- [ ] Implement request formatting
+- [ ] Handle streaming responses
+- [ ] Cost calculation
+- [ ] Error handling + retries
 
-### MVP Features (What's Included)
+**Anthropic Integration (15h)**
+- [ ] Set up Anthropic SDK
+- [ ] Create adapter (consistent with OpenAI)
+- [ ] Test Claude 3 models
+- [ ] Cost tracking
 
-✅ **Core Loop**
-- Request classification (5 categories)
-- Clarifying questions (up to 3)
-- Prompt engineering (template-based)
-- Model routing (scoring algorithm)
-- Parallel model execution
-- Results comparison
+**Google Gemini (15h)**
+- [ ] Set up Google API
+- [ ] Create adapter
+- [ ] Test Gemini Pro
+- [ ] Cost tracking
 
-✅ **Models**
-- OpenAI (GPT-4, GPT-3.5)
-- Anthropic (Claude 3 Opus, Sonnet)
-- Google (Gemini Pro)
-- Mock data (for demo)
+**Async Job Queue (15h)**
+- [ ] Set up Bull.js (Redis-backed)
+- [ ] Implement parallel model execution
+- [ ] Stream results to frontend (WebSocket or polling)
+- [ ] Handle timeouts/failures
 
-✅ **UI/UX**
-- 5-step workflow indicator
-- Responsive design (mobile + desktop)
-- Dark mode support (via CSS variables)
-- Clear cost estimates
-- Iteration controls
+**Estimated Hours:** 65h
 
-❌ **NOT Included (V1+)**
-- User authentication
-- Database persistence
-- Project history
-- Image/multimodal input
-- Web search integration
-- Local Ollama
-- PII detection
-- Audit logs
-- API key encryption (browser storage only)
+### Week 8: Data Persistence & History
 
----
+**Save/Load Projects (20h)**
+- [ ] Implement project CRUD
+- [ ] Project versioning
+- [ ] Prompt history
+- [ ] Run history with results
 
-## 🚀 V1 Scope (Weeks 4–10)
+**Cost Tracking (15h)**
+- [ ] Store cost per run
+- [ ] Aggregate by user/month
+- [ ] Build cost dashboard (simple charts)
+- [ ] Invoice/usage export (stretch)
 
-### Goal
-Transform MVP into production-ready SaaS with user management, persistence, and advanced features.
+**Estimated Hours:** 35h
 
-### Week 4: User Authentication
+### Week 9: Advanced Features (Choose Top 3)
 
-**GitHub OAuth**
-- [ ] Set up NextAuth.js / Auth0
-- [ ] GitHub OAuth provider
-- [ ] User session management
-- [ ] Protected routes
-- **Effort**: 16 hours
-
-**Email/Password (Optional)**
-- [ ] User registration form
-- [ ] Password hashing (bcrypt)
-- [ ] Email verification
-- [ ] Password reset flow
-- **Effort**: 12 hours (optional, can skip)
-
----
-
-### Week 5: Database & Persistence
-
-**Database Schema**
-- [ ] PostgreSQL + Prisma ORM
-- [ ] Users, Projects, Requests, Prompts, Runs tables
-- [ ] Cost tracking & audit logs
-- [ ] Migrations
-- **Effort**: 12 hours
-
-**API Persistence**
-- [ ] Save requests → projects
-- [ ] Store prompt versions
-- [ ] Record model runs (cost, tokens, results)
-- [ ] Fetch user history
-- **Effort**: 16 hours
-
----
-
-### Week 6: Multimodal & Web Search
-
-**Image Input**
+**Option A: Multimodal (20h)**
 - [ ] Image upload UI
-- [ ] Send to multimodal models (GPT-4V, Claude 3 Vision, Gemini Vision)
-- [ ] Image preprocessing (resize, format)
-- **Effort**: 12 hours
+- [ ] Image description generation
+- [ ] Vision model support (GPT-4V, Claude 3V)
+- [ ] Image results display
 
-**Web Search Integration**
-- [ ] Tavily / SerpAPI integration
-- [ ] Search for context (research tasks)
-- [ ] Inject results into prompt
-- [ ] Attribution & source links
-- **Effort**: 12 hours
+**Option B: Web Search Integration (20h)**
+- [ ] Integrate search API (Google Custom Search or SerpAPI)
+- [ ] Fetch + summarize results
+- [ ] Add search results to context
+- [ ] Cite sources in output
 
----
+**Option C: Local Ollama (20h)**
+- [ ] Detect local Ollama instance
+- [ ] Model selector UI
+- [ ] Request formatting for Ollama
+- [ ] Privacy mode (local-only)
 
-### Week 7: Privacy & Safety
+**Option D: PII Detection (20h)**
+- [ ] Implement regex + ML-based PII detection
+- [ ] Redaction UI
+- [ ] Logging with redaction
+- [ ] Configuration per user
 
-**PII Detection & Redaction**
-- [ ] Regex patterns for email, phone, SSN, credit card, names
-- [ ] Detect before sending to models
-- [ ] Redaction UI (user confirms what to redact)
-- [ ] Audit log of redactions
-- **Effort**: 12 hours
+**Estimated Hours:** 20h (choose 1, defer others)
 
-**Local Ollama Support**
-- [ ] Ollama API adapter
-- [ ] Model options (llama2, mistral, neural-chat)
-- [ ] Privacy-first mode (all local, no external API calls)
-- [ ] Auto-detect local Ollama instance
-- **Effort**: 10 hours
+### Week 10: Polish & Ship V1
 
-**Audit Logs**
-- [ ] Track all model calls
-- [ ] Store: timestamp, user, model, prompt (redacted), cost, latency
-- [ ] Audit view for users
-- [ ] Export audit trail (compliance)
-- **Effort**: 10 hours
+**QA (15h)**
+- [ ] End-to-end testing
+- [ ] Edge case handling
+- [ ] Performance testing
+- [ ] Mobile check
 
----
+**Documentation (10h)**
+- [ ] Update README
+- [ ] Write API docs
+- [ ] Create user guide
+- [ ] Write deployment guide
 
-### Week 8: Advanced Routing & Cost Tracking
+**Infrastructure (10h)**
+- [ ] Set up monitoring (Sentry for errors)
+- [ ] Configure CI/CD (GitHub Actions)
+- [ ] Deploy backend (Railway or Render)
+- [ ] Set up logging
 
-**ML-Based Scoring (Optional)**
-- [ ] Replace rule-based router with ML model
-  - Train on historical user feedback (which model they picked)
-  - Improve recommendations over time
-- [ ] Can skip for V1, revisit in V2
-- **Effort**: 16 hours (if included)
+**Estimated Hours:** 35h
 
-**Cost Dashboard**
-- [ ] Per-user cost tracking
-- [ ] Cost by model, task type, date
-- [ ] Projected monthly spend
-- [ ] Budget alerts
-- [ ] Export as CSV
-- **Effort**: 12 hours
+### V1 Deliverables
 
----
-
-### Week 9: Settings & Advanced Features
-
-**User Settings**
-- [ ] API key management (encrypted storage)
-- [ ] Privacy preferences (no-store mode, PII scan default)
-- [ ] Default model preferences
-- [ ] Monthly budget cap
-- [ ] Notification preferences
-- **Effort**: 12 hours
-
-**Prompt Versioning & A/B Test**
-- [ ] Store multiple prompt versions
-- [ ] Diff view (what changed)
-- [ ] Rerun old prompts
-- [ ] Tag "variant A" vs "variant B"
-- [ ] Compare A/B test results
-- **Effort**: 12 hours
-
----
-
-### Week 10: Testing, Documentation, Polish
-
-**Testing**
-- [ ] Unit tests: 80%+ coverage (router, classifier, cost calcs)
-- [ ] Integration tests: API endpoints, database
-- [ ] E2E tests: Full user flows (Playwright)
-- [ ] Load testing: 100 concurrent users
-- **Effort**: 16 hours
-
-**Documentation**
-- [ ] API reference (OpenAPI/Swagger)
-- [ ] Architecture diagrams (updated)
-- [ ] Deployment guide (production)
-- [ ] Troubleshooting & FAQ
-- [ ] Video tutorial (5 min walkthrough)
-- **Effort**: 10 hours
-
-**Production Polish**
-- [ ] Error handling & logging
-- [ ] Rate limiting (per user, per API)
-- [ ] Performance optimizations (caching, compression)
-- [ ] Security audit (input validation, CSRF, XSS)
-- [ ] GDPR compliance (data deletion, export)
-- **Effort**: 12 hours
-
----
-
-## 📈 Effort Summary
-
-| Phase | Weeks | Frontend | Backend | Infra | Total Hours |
-|-------|-------|----------|---------|-------|-------------|
-| MVP   | 1-3   | 40 hrs   | 40 hrs  | 40 hrs | 120 hrs     |
-| V1    | 4-10  | 50 hrs   | 80 hrs  | 30 hrs | 160 hrs     |
-| **Total** | **10** | **90 hrs** | **120 hrs** | **70 hrs** | **280 hrs** |
-
-**Team capacity**: 1 full-time engineer = 10 weeks
-
----
-
-## 🛠️ Tech Stack Checklist
-
-### Frontend
-- [x] React 18 + Vite
-- [x] Zustand (state)
-- [x] Tailwind CSS + design system
-- [ ] NextAuth.js (V1)
-- [ ] TanStack Query (V1)
-- [ ] Playwright (E2E)
-
-### Backend
-- [x] Node.js + Express
-- [ ] PostgreSQL + Prisma (V1)
-- [ ] Bull.js (job queue, V1)
-- [ ] Winston (logging, V1)
-- [ ] Helmet (security, V1)
-- [ ] Jest (testing)
-
-### DevOps
-- [x] GitHub repo
-- [ ] GitHub Actions (CI/CD, V1)
-- [x] Vercel (frontend)
-- [ ] Railway/Render (backend, V1)
-- [ ] Docker Compose (development)
-- [ ] Sentry (error tracking, V1)
-
----
-
-## 📍 Milestones
-
-### M1: MVP Live Demo (Week 3)
 ```
-✅ Core loop working
-✅ 3 models supported
-✅ Live at vercel.app
-✅ Public GitHub repo
-✅ Documentation complete
+✅ Frontend (React)             Fully connected to backend
+✅ Backend API                  Express.js + PostgreSQL
+✅ Real API Integration         OpenAI, Anthropic, Google
+✅ User Auth                    GitHub OAuth
+✅ Project Persistence          Save/load history
+✅ Cost Tracking                Per-run, per-user, per-month
+✅ Async Execution              Parallel model runs
+✅ Deployed Production           Frontend + backend live
+✅ Documentation                API docs, user guides
 ```
 
-### M2: Authentication (Week 4)
-```
-✅ GitHub OAuth working
-✅ User sessions
-✅ Protected routes
-```
+### V1 Success Criteria
 
-### M3: Persistence (Week 5)
-```
-✅ Database live
-✅ Projects saved
-✅ History available
-✅ Cost tracking
-```
-
-### M4: Multimodal (Week 6)
-```
-✅ Image input
-✅ Web search results
-✅ Vision models tested
-```
-
-### M5: Privacy & Safety (Week 7)
-```
-✅ PII detection
-✅ Ollama local support
-✅ Audit logs
-```
-
-### M6: Production Ready (Week 10)
-```
-✅ Full test coverage
-✅ Deployment guide
-✅ Security audit pass
-✅ Performance optimized
-✅ Documentation complete
-```
+- [ ] Users can sign up, save projects, get real model results
+- [ ] Cost tracking is accurate
+- [ ] System handles 100+ concurrent users
+- [ ] Uptime >99.5%
+- [ ] Page load <2s
+- [ ] API response <3s (typical)
+- [ ] Feature parity with MVP (no regression)
 
 ---
 
-## 🎯 Key Metrics
+## V2 & Beyond
 
-### Success Criteria (MVP)
-- ✅ App loads in < 2s
-- ✅ Classification accuracy > 80%
-- ✅ All 5 screens fully functional
-- ✅ Multi-model execution works
-- ✅ Results comparison clear & useful
-- ✅ Zero critical bugs
+### V2 Ideas (Post-MVP + V1 feedback)
 
-### Success Criteria (V1)
-- ✅ 100+ beta users
-- ✅ User retention > 40% (1-week)
-- ✅ Positive NPS (Net Promoter Score)
-- ✅ < 1% error rate on API calls
-- ✅ 99% uptime
-- ✅ Cost per user < $0.50/month (server costs)
+- **Team features:** Share projects, collaborate on prompts
+- **Fine-tuning:** Create custom models
+- **Specialized tools:** Image gen (DALL-E), transcription (Whisper), video
+- **Advanced routing:** ML-based scoring (instead of rules)
+- **Integrations:** Slack, email, webhooks
+- **Marketplace:** Sell prompts, share templates
+- **Analytics:** Per-task type insights, trends
+
+Decide based on user feedback.
 
 ---
 
-## 💰 Resource & Cost Estimate
+## Resources & Estimates
 
-### Development Cost
-- 1 full-stack engineer × 10 weeks @ $80/hr (junior) = $32k
-- Or @ $150/hr (mid-level) = $60k
+### Team
+- **MVP:** 1 full-time engineer, 3 weeks = ~120 hours
+- **V1:** 1-2 engineers, 6-10 weeks = ~240-400 hours
 
-### Infrastructure (Monthly, V1)
-- Vercel: $0 (free tier)
-- Railway/Render: ~$15 (backend)
-- PostgreSQL: ~$10 (hosting)
-- Redis: ~$5 (caching)
-- Total: ~$30/month
+### Infrastructure Costs
+- **MVP:** $0 (Vercel free tier)
+- **V1:** ~$100-200/month (database, hosting, monitoring)
 
-### Model API Costs (Variable)
-- Depends on user volume
-- Estimate: $0.10-0.30 per query
-- Mark up 2-3x for SaaS pricing
+### Third-Party Costs
+- **OpenAI:** $10-50/month (development)
+- **Anthropic:** $5-20/month
+- **Google Gemini:** Free (first month)
+- **Database:** $15-30/month (Heroku Postgres or similar)
 
----
-
-## 🚨 Risks & Mitigations
-
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| Model API costs spike | High | Implement strict rate limits, usage alerts, hard caps |
-| User data leakage | Critical | PII detection, encryption, audit logs, GDPR compliance |
-| Feature creep delays MVP | High | Strict scope lock, cut non-core features, MVP first |
-| Model API downtime | Medium | Fallback to mock data, cache responses, status page |
-| Poor routing accuracy | Medium | Regular A/B testing, user feedback, improve algorithm |
-| Scaling issues at 1k+ users | Medium | Database indexing, caching strategy, load testing early |
+### Tools Needed
+- Git + GitHub (free)
+- VS Code (free)
+- Vercel (free tier)
+- Railway or Render (free tier)
+- Postman or Insomnia (testing API)
 
 ---
 
-## ✅ Definition of Done
+## Risks & Contingencies
 
-A feature is "done" when:
-1. Code written & peer-reviewed
-2. Unit tests pass (> 80% coverage)
-3. Integration test passes
-4. Works on mobile & desktop
-5. Accessibility tested (WCAG 2.1 AA)
-6. Performance < 3s load time
-7. Documented (code + user docs)
-8. Deployed to staging
-9. Tested in staging by QA
-10. Deployed to production
+### Risk: Features take longer than estimated
+**Plan B:** Cut features (prioritize auth + real API integration over persistence)
 
----
+### Risk: API rate limits hit during testing
+**Plan B:** Use smaller request batches, cache responses
 
-## 📞 Team Assignments
+### Risk: User feedback says we're solving the wrong problem
+**Plan B:** Pivot. Have a backlog of alternative problems to validate.
 
-### For 1 Engineer (You!)
-- **MVP (Weeks 1-3)**: Focus on core logic + UI
-  - Frontend 50%, backend 30%, infra 20%
-- **V1 (Weeks 4-10)**: Add features + stabilize
-  - Frontend 35%, backend 45%, infra 20%
-
-### For 2 Engineers (Ideal)
-- **Engineer 1 (Full-stack)**: Frontend + API
-- **Engineer 2 (Backend-focused)**: Database + infra + scaling
-- Weekly sync-ups, async updates via PR reviews
+### Risk: Competitor launches similar product
+**Plan B:** Focus on UX and speed. Move faster. Build community.
 
 ---
 
-## 🎓 Learning Outcomes
+## Success Criteria (Overall)
 
-By completing this project, you'll understand:
-- ✅ Full-stack architecture (frontend → backend → DB → cloud)
-- ✅ Async job processing (queue-based execution)
-- ✅ Multi-provider API integration (SDKs, adapters, fallbacks)
-- ✅ System design (routing, scoring, cost optimization)
-- ✅ Product thinking (user stories, acceptance criteria, roadmap)
-- ✅ DevOps & deployment (CI/CD, Docker, cloud platforms)
-- ✅ Security & compliance (PII, audit logs, privacy modes)
-- ✅ Prompt engineering & LLM interaction
+**By end of V1 (Week 10):**
+- [ ] 500+ GitHub stars
+- [ ] 100+ active users
+- [ ] Users saving projects and comparing models regularly
+- [ ] Cost savings demonstrated (30%+ vs. GPT-4 baseline)
+- [ ] Featured in 1-2 AI newsletters
+- [ ] Codebase is portfolio-worthy
+- [ ] Deployment is stable and scalable
 
-**Perfect for**: AI/ML architect roles, PM at AI companies, full-stack startup founding.
+**Feel:** This should feel like a real product, not a demo.
 
 ---
 
-**Ready to build? Start with Week 1! 🚀**
+## Decision Points
+
+**After MVP (End of Week 3):**
+- Proceed to V1? Or pivot based on feedback?
+- Which 3 advanced features matter most to users?
+
+**After V1 (End of Week 10):**
+- Go public (ProductHunt, HN, etc.)?
+- Build a team?
+- Explore monetization?
+- Or pivot to different problem?
+
+---
+
+## Notes for Yourself
+
+- **Don't over-engineer MVP.** Rough is fine. It's a prototype.
+- **Ship early, get feedback, iterate.** Guessing is worse than learning.
+- **Track time honestly.** If it's taking longer than estimated, say so. Adjust plan.
+- **Take breaks.** 3 weeks full-time is intense. Sleep > code.
+- **Have fun with it.** This is a portfolio piece. Make it something you're proud of.
+
+---
+
+**Go build it. 🚀**
